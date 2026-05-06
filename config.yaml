@@ -1,0 +1,25 @@
+app:
+  name: legalmove-contract-analyzer
+  version: "1.0.0"
+
+openai:
+  model_vision: gpt-4o
+  model_agents: gpt-4o-mini
+  max_tokens: 2000
+  temperature_contextualization: 0.2
+  temperature_extraction: 0.0
+
+langfuse:
+  trace_name: contract-analysis
+  spans:
+    parse_original: parse_original_contract
+    parse_amendment: parse_amendment_contract
+    contextualization: contextualization_agent
+    extraction: extraction_agent
+
+image_parser:
+  supported_formats:
+    - .jpg
+    - .jpeg
+    - .png
+  encoding: utf-8
