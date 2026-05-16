@@ -1,16 +1,18 @@
 # La funcion de este agente es recibir dos textos extraidos y producir un resumen de los cambios realizados entre ambos documentos
 
-from openai import OpenAI
+from xmlrpc import client
+
 from shared.config_loader import ConfigLoader
 from shared.logger import get_logger
 
 from prompts.templates import EXTRACTION_AGENT_PROMPT
 
-client = OpenAI()
 config = ConfigLoader()
-log = get_logger("extraction_agent")
+log = get_logger("extraction_agent") 
 
-class ExtractionAgent:
+class ExtractionAgent():
+    def __init__(self, client):
+        self.client = client
 
     def extract(self, original_text, amendment_text, document_analysis):
         """Recibe el texto completo del contrato original, el texto completo de la enmienda y un análisis del documento (mapa conceptual) y produce un resumen de los cambios realizados entre ambos documentos.
@@ -26,7 +28,7 @@ class ExtractionAgent:
 
         try:
             model = config.get("openai.model_agents")
-            client_response = client.responses.create(
+            client_response = self.client.responses.create(
                 model=model,
                 input=[
                     {

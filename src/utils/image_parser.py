@@ -1,14 +1,13 @@
 from base64 import  b64encode
-from openai import OpenAI
 
 from prompts.templates import VISION_PROMPT
 from shared.config_loader import ConfigLoader
 
 
-client = OpenAI()
+
 config = ConfigLoader()
 
-def parse_contract_image(image_path: str) -> str:
+def parse_contract_image(image_path: str, client) -> str:
     """Recibe la ruta de una imagen que contiene un contrato y devuelve el texto completo del contrato extraído de la imagen.
     
     Args:
