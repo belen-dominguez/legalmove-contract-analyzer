@@ -6,7 +6,6 @@ Responsabilidad: instrumentar el flujo del sistema con Langfuse v4.
 """
 
 from dotenv import load_dotenv
-
 from langfuse import Langfuse
 
 
