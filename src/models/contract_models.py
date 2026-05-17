@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from shared.logger import get_logger
 
 log = get_logger("contract_models")
@@ -9,9 +9,9 @@ class ContractChangeOutput(BaseModel):
     Define la estructura esperada del JSON que produce el Agente 2
     antes de ser devuelto al sistema.
     """
-    sections_changed: list[str]  
-    topics_touched: list[str]  
-    summary_of_the_change: str 
+    sections_changed: list[str] = Field(..., min_length=1, description="Secciones modificadas en la enmienda")
+    topics_touched: list[str] = Field(..., min_length=1, description="Temas legales afectados por los cambios")
+    summary_of_the_change: str = Field(..., min_length=20, description="Resumen detallado de los cambios realizados")
 
     @staticmethod
     def validate_output(json_string: str) -> "ContractChangeOutput": 
