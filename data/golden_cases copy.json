@@ -1,0 +1,43 @@
+{
+  "par1_cambios_simples": {
+    "description": "Contrato de prestación de servicios — cambios simples",
+    "files": {
+      "original": "par1_original.png",
+      "amendment": "par1_enmienda.png"
+    },
+    "expected_output": {
+      "sections_changed": [
+        "2. Duración",
+        "3. Precio y Forma de Pago"
+      ],
+      "topics_touched": [
+        "Duración del contrato",
+        "Precio mensual"
+      ],
+      "summary_of_the_change": "La enmienda extiende la duración del contrato 6 meses adicionales, con nuevo vencimiento el 31 de diciembre de 2024. Además actualiza el monto mensual de ARS 150.000 a ARS 180.000 a partir del 1 de julio de 2024."
+    }
+  },
+  "par2_cambios_complejos": {
+    "description": "Acuerdo de confidencialidad — cambios complejos",
+    "files": {
+      "original": "par2_original.png",
+      "amendment": "par2_enmienda.png"
+    },
+    "expected_output": {
+      "sections_changed": [
+        "1. Definición de Información Confidencial",
+        "3. Alcance Territorial",
+        "5. Exclusiones",
+        "7. Protección de Datos Personales"
+      ],
+      "topics_touched": [
+        "Definición de información confidencial",
+        "Alcance territorial de las obligaciones",
+        "Eliminación de exclusiones",
+        "Protección de datos personales",
+        "Cumplimiento normativo"
+      ],
+      "summary_of_the_change": "La enmienda amplía la definición de información confidencial para incluir datos personales, algoritmos y propiedad intelectual conjunta. Extiende el alcance territorial a nivel internacional. Elimina completamente la cláusula de exclusiones, haciendo toda información compartida confidencial sin excepción. Agrega una nueva cláusula de protección de datos personales conforme a la Ley 25.326, con obligación de notificar incidentes de seguridad en 48 horas."
+    }
+  }
+}

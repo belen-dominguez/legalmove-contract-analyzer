@@ -1,5 +1,6 @@
 # La funcion de este agente es recibir dos textos extraidos y producir un resumen de los cambios realizados entre ambos documentos
 
+from urllib import response
 from xmlrpc import client
 
 from shared.config_loader import ConfigLoader
@@ -41,10 +42,10 @@ class ExtractionAgent():
                     }
                 ],
             )
-
-            log.info("Extraction completed successfully")
             
+            log.info("Extraction completed successfully")
             return client_response.output_text
+        
         except Exception as e:
             log.error(f"Error en ExtractionAgent: {e}")
             raise e

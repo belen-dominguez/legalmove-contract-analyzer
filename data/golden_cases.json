@@ -1,0 +1,52 @@
+{
+  "par1_cambios_simples": {
+    "description": "Contrato de Licencia de Software — TechNova S.A. y DataBridge Soluciones S.R.L.",
+    "files": {
+      "original": "documento_1__original.jpg",
+      "amendment": "documento_1__enmienda.jpg"
+    },
+    "expected_output": {
+      "sections_changed": [
+        "1. Otorgamiento de Licencia",
+        "2. Plazo",
+        "3. Pago",
+        "4. Soporte",
+        "5. Terminación",
+        "7. Protección de Datos"
+      ],
+      "topics_touched": [
+        "Alcance de la licencia de software",
+        "Duración del contrato",
+        "Tarifa de licencia",
+        "Canales de soporte técnico",
+        "Plazo de notificación de rescisión",
+        "Protección de datos"
+      ],
+      "summary_of_the_change": "La enmienda modifica el alcance de la licencia de 'fines internos de la empresa' a 'operaciones internas de negocio'. Extiende el plazo de 12 a 24 meses. Aumenta la tarifa anual de USD 12.000 a USD 15.000. Agrega el chat como canal de soporte además del correo electrónico. Extiende el plazo de notificación de rescisión de 30 a 60 días. Agrega una nueva cláusula 7 de Protección de Datos."
+    }
+  },
+  "par2_cambios_complejos": {
+    "description": "Contrato de Servicios de Consultoría — Orion Consulting Group y GreenWave Energía S.A.",
+    "files": {
+      "original": "documento_2__original.jpg",
+      "amendment": "documento_2__enmienda.jpg"
+    },
+    "expected_output": {
+      "sections_changed": [
+        "1. Alcance del Servicio",
+        "2. Duración",
+        "3. Honorarios",
+        "4. Entregables",
+        "7. Propiedad Intelectual"
+      ],
+      "topics_touched": [
+        "Alcance y tipo de servicios de consultoría",
+        "Duración del contrato",
+        "Honorarios mensuales",
+        "Frecuencia de entregables",
+        "Propiedad intelectual"
+      ],
+      "summary_of_the_change": "La enmienda amplía el alcance del servicio agregando análisis regulatorio. Extiende la duración de 6 a 9 meses. Aumenta los honorarios mensuales de USD 8.000 a USD 9.500. Cambia la frecuencia de los reportes de mensual a quincenal. Agrega una nueva cláusula 7 de Propiedad Intelectual estableciendo que todos los entregables pasarán a ser propiedad del Cliente una vez realizado el pago final."
+    }
+  }
+}
