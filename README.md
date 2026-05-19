@@ -134,7 +134,7 @@ LANGFUSE_HOST=https://cloud.langfuse.com
 ### Correr el pipeline
 
 ```bash
-python src/main.py data/test_contracts/original.jpg data/test_contracts/enmienda.jpg
+python src/main.py data/test_contracts/documento_2__original.jpg data/test_contracts/documento_2__enmienda.jpg
 ```
 
 ### Output esperado
