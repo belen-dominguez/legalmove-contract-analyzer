@@ -2,11 +2,11 @@
 
 from shared.config_loader import ConfigLoader
 from shared.logger import get_logger
-
+from utils.llm_client import generate_response
 from prompts.templates import EXTRACTION_AGENT_PROMPT
 
 config = ConfigLoader()
-log = get_logger("extraction_agent") 
+log = get_logger("extraction_agent")
 
 class ExtractionAgent():
     def __init__(self, client):
@@ -27,24 +27,25 @@ class ExtractionAgent():
         try:
             model = config.get("openai.model_agents")
             temperature = config.get("openai.temperature_extraction", 0)
-            client_response = self.client.responses.create(
+            input_data = [
+                {
+                    "role": "system",
+                    "content": EXTRACTION_AGENT_PROMPT
+                },
+                {
+                    "role": "user",
+                    "content": f"documento original:\n{original_text}\n\nEnmienda:\n{amendment_text}\n\nMapa conceptual de los documentos a comparar:\n{document_analysis}"
+                }
+            ]
+            
+            return generate_response(
+                client=self.client,
                 model=model,
                 temperature=temperature,
-                input=[
-                    {
-                        "role": "system",
-                        "content": EXTRACTION_AGENT_PROMPT
-                    },
-                    {
-                        "role": "user",
-                        "content": f"documento original:\n{original_text}\n\nEnmienda:\n{amendment_text}\n\nMapa conceptual de los documentos a comparar:\n{document_analysis}"
-                    }
-                ],
+                input_data=input_data
             )
-            
-            log.info("Extraction completed successfully")
-            return client_response.output_text
-        
+
+                    
         except Exception as e:
             log.error(f"Error en ExtractionAgent: {e}")
-            raise e
+            raise 

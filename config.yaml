@@ -8,6 +8,7 @@ openai:
   max_tokens: 2000
   temperature_contextualization: 0.2
   temperature_extraction: 0.0
+  temperature_vision: 0
 
 langfuse:
   trace_name: contract-analysis

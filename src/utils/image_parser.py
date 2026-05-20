@@ -3,6 +3,7 @@ from base64 import  b64encode
 from prompts.templates import VISION_PROMPT
 from shared.logger import get_logger
 from shared.config_loader import ConfigLoader
+from utils.llm_client import generate_response
 
 
 logger = get_logger("image_parser")
@@ -28,20 +29,16 @@ def parse_contract_image(image_path: str, client) -> str:
       
     try:
         logger.info(f"Procesando imagen: {image_path}")
-        
+
         with open(image_path, "rb") as image_file:
             image_bytes = image_file.read()
             image_base64 = b64encode(image_bytes).decode('utf-8')
         
         model = config.get("openai.model_vision")
-        temperature = config.get("openai.temperature_extraction", 0)
+        temperature = config.get("openai.temperature_vision", 0)
         extension = image_path.lower().split('.')[-1]
         media_type = "image/png" if extension == "png" else "image/jpeg"
-
-        response = client.responses.create(
-            model=model,
-            temperature=temperature,
-            input=[
+        input_data=[
                 {
                     "role": "user",
                     "content": [
@@ -52,22 +49,20 @@ def parse_contract_image(image_path: str, client) -> str:
                         },
                     ],
                 }
-            ],
+            ]
+    
+        return generate_response(
+            client=client,
+            model=model,
+            temperature=temperature,
+            input_data=input_data
         )
         
-        
-        parsed_text = response.output_text.strip()
 
-        if len(parsed_text) < 50:
-            raise ValueError("El modelo devolvió una respuesta vacía o inválida.")
-        
-        logger.info(f"Texto extraído correctamente ({len(parsed_text)} caracteres)")
-        return parsed_text
     
     except FileNotFoundError:
-        raise FileNotFoundError(f"No se encontró el archivo: {image_path}")
+        raise
     except Exception as e:
-        logger.error(f"Error al procesar la imagen: {e}")
-        raise RuntimeError("No se pudo procesar la imagen. Por favor, inténtalo de nuevo.")
+        raise RuntimeError(f"No se pudo procesar la imagen: {e}")
 
     

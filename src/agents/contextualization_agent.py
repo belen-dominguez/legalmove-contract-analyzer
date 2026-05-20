@@ -2,7 +2,7 @@
 
 from shared.config_loader import ConfigLoader
 from shared.logger import get_logger
-
+from utils.llm_client import generate_response
 from prompts.templates import CONTEXT_AGENT_PROMPT
 
 config = ConfigLoader()
@@ -26,24 +26,24 @@ class ContextualizationAgent:
         try:
             model = config.get("openai.model_agents")
             temperature = config.get("openai.temperature_contextualization", 0)
-            client_response = self.client.responses.create(
+            input_data = [
+                {
+                    "role": "system",
+                    "content": CONTEXT_AGENT_PROMPT
+                },
+                {
+                    "role": "user",
+                    "content": f"contrato original:\n{original_text}\n\nEnmienda:\n{amendment_text}"
+                }
+            ]
+            
+            return generate_response(
+                client=self.client,
                 model=model,
                 temperature=temperature,
-                input=[
-                    {
-                        "role": "system",
-                        "content": CONTEXT_AGENT_PROMPT
-                    },
-                    {
-                        "role": "user",
-                        "content": f"contrato original:\n{original_text}\n\nEnmienda:\n{amendment_text}"
-                    }
-                ],
+                input_data=input_data
             )
-
-            log.info("Context map generated successfully")
-
-            return client_response.output_text
+                   
         except Exception as e:
             log.error(f"Error en ContextualizationAgent: {e}")
-            raise e
+            raise 
