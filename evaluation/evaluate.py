@@ -6,8 +6,9 @@ import os
 
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
-from pipeline import run_pipeline
+from pipeline import ContractAnalysisPipeline
 
+pipeline = ContractAnalysisPipeline()
 
 def palabras_clave(texto):
     return set(w.lower() for w in texto.split() if len(w) > 3)
@@ -33,7 +34,7 @@ def calculate_metrics(real_list: list, expected_list: list) -> dict:
 def evaluate_case(case_name, case_data):
     print(f"\n=== Evaluando: {case_name} ===")
     
-    result = run_pipeline({
+    result = pipeline.run({
         "original": f"data/test_contracts/{case_data['files']['original']}",
         "amendment": f"data/test_contracts/{case_data['files']['amendment']}"
     })

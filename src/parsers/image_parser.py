@@ -28,7 +28,7 @@ def parse_contract_image(image_path: str, client) -> str:
                 raise ValueError("La ruta de la imagen debe ser un archivo de imagen válido (.png, .jpg, .jpeg, .webp).")      
       
     try:
-        logger.info(f"Procesando imagen: {image_path}")
+        logger.info(f"Processing image: {image_path}")
 
         with open(image_path, "rb") as image_file:
             image_bytes = image_file.read()
