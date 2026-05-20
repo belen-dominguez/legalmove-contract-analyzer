@@ -72,8 +72,12 @@ legalmove-contract-analyzer/
 │   ├── agents/
 │   │   ├── contextualization_agent.py   # Agente 1: Analista Senior
 │   │   └── extraction_agent.py          # Agente 2: Auditor Legal
+|   ├── parsers/
+│   |   └── image_parser.py
 │   ├── utils/
-│   │   └── image_parser.py              # Parsing multimodal con GPT-4o Vision
+│   │   ├── image_parser.py              # Parsing multimodal con GPT-4o Vision
+│   │   ├── llm_client.py
+│   │   └── retry_llm_call.py
 │   ├── models/
 │   │   └── contract_models.py           # Schema Pydantic del output
 │   ├── prompts/

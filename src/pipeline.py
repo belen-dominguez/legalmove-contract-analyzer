@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 from shared.config_loader import ConfigLoader
 from shared.logger import get_logger
 from openai import OpenAI
-from utils.image_parser import parse_contract_image
+from parsers.image_parser import parse_contract_image
 from models.contract_models import ContractChangeOutput
 from agents.contextualization_agent import ContextualizationAgent
 from agents.extraction_agent import ExtractionAgent
