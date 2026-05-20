@@ -14,7 +14,6 @@ from utils.retry_call import retry_llm_call
 config = ConfigLoader()
 logger = get_logger("pipeline")
 load_dotenv()
-client = OpenAI()
 
 class ContractAnalysisPipeline:
     def __init__(self):
@@ -39,14 +38,14 @@ class ContractAnalysisPipeline:
             with self.tracer.start_span( config.get("langfuse.spans.parse_original"), input_data={"path": documents["original"]}):
                 logger.info("Parsing original contract")
                 original_parsed = retry_llm_call(
-                    lambda: parse_contract_image(documents["original"], client)
+                    lambda: parse_contract_image(documents["original"], self.client)
                 )
                 self.tracer.set_output({"text": original_parsed})
             
             with self.tracer.start_span( config.get("langfuse.spans.parse_amendment"), input_data={"path": documents["amendment"]}):
                 logger.info("Parsing amendment")
                 amendment_parsed = retry_llm_call(
-                    lambda: parse_contract_image(documents["amendment"], client)
+                    lambda: parse_contract_image(documents["amendment"], self.client)
                 )
                 self.tracer.set_output({"text": amendment_parsed})
             
@@ -54,21 +53,30 @@ class ContractAnalysisPipeline:
 
             with self.tracer.start_span( config.get("langfuse.spans.contextualization"), input_data={"original": original_parsed, "amendment": amendment_parsed}):
                 logger.info("Contextualizing documents")
-                document_analysis = self.contextualization_agent.contextualize(original_parsed, amendment_parsed)
-
-                if not document_analysis or len(document_analysis.strip()) < 100:
-                    raise ValueError("Contextualization agent returned empty response")
+                document_analysis = retry_llm_call(
+                    lambda: self.contextualization_agent.contextualize(
+                        original_parsed,
+                        amendment_parsed
+                    )
+                )
                 
                 self.tracer.set_output({"text": document_analysis})
 
 
-
             with self.tracer.start_span( config.get("langfuse.spans.extraction"), input_data={"original": original_parsed, "amendment": amendment_parsed, "context": document_analysis}):
                 logger.info("Extracting changes between documents")
-                changes_summary = self.extraction_agent.extract(original_parsed, amendment_parsed, document_analysis)
+                changes_summary = retry_llm_call(
+                    lambda: self.extraction_agent.extract(
+                        original_parsed,
+                        amendment_parsed,
+                        document_analysis
+                    )
+                )
                 self.tracer.set_output({"text": changes_summary})
 
             results =  ContractChangeOutput.validate_output(changes_summary)
+            logger.info("Output validated successfully")
+            logger.info("Pipeline completed successfully")
             
             logger.info("LegalMove Contract Analyzer finished")
             self.tracer.flush()
