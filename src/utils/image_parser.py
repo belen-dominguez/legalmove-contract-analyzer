@@ -27,6 +27,8 @@ def parse_contract_image(image_path: str, client) -> str:
                 raise ValueError("La ruta de la imagen debe ser un archivo de imagen válido (.png, .jpg, .jpeg, .webp).")      
       
     try:
+        logger.info(f"Procesando imagen: {image_path}")
+        
         with open(image_path, "rb") as image_file:
             image_bytes = image_file.read()
             image_base64 = b64encode(image_bytes).decode('utf-8')
@@ -52,7 +54,15 @@ def parse_contract_image(image_path: str, client) -> str:
                 }
             ],
         )
-        return response.output_text
+        
+        
+        parsed_text = response.output_text.strip()
+
+        if len(parsed_text) < 50:
+            raise ValueError("El modelo devolvió una respuesta vacía o inválida.")
+        
+        logger.info(f"Texto extraído correctamente ({len(parsed_text)} caracteres)")
+        return parsed_text
     
     except FileNotFoundError:
         raise FileNotFoundError(f"No se encontró el archivo: {image_path}")
