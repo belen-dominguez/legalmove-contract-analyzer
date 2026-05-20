@@ -32,11 +32,13 @@ def parse_contract_image(image_path: str, client) -> str:
             image_base64 = b64encode(image_bytes).decode('utf-8')
         
         model = config.get("openai.model_vision")
+        temperature = config.get("openai.temperature_extraction", 0)
         extension = image_path.lower().split('.')[-1]
         media_type = "image/png" if extension == "png" else "image/jpeg"
 
         response = client.responses.create(
             model=model,
+            temperature=temperature,
             input=[
                 {
                     "role": "user",

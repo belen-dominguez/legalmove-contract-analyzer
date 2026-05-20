@@ -25,8 +25,10 @@ class ContextualizationAgent:
 
         try:
             model = config.get("openai.model_agents")
+            temperature = config.get("openai.temperature_contextualization", 0)
             client_response = self.client.responses.create(
                 model=model,
+                temperature=temperature,
                 input=[
                     {
                         "role": "system",

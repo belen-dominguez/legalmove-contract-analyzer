@@ -1,8 +1,5 @@
 # La funcion de este agente es recibir dos textos extraidos y producir un resumen de los cambios realizados entre ambos documentos
 
-from urllib import response
-from xmlrpc import client
-
 from shared.config_loader import ConfigLoader
 from shared.logger import get_logger
 
@@ -29,8 +26,10 @@ class ExtractionAgent():
 
         try:
             model = config.get("openai.model_agents")
+            temperature = config.get("openai.temperature_extraction", 0)
             client_response = self.client.responses.create(
                 model=model,
+                temperature=temperature,
                 input=[
                     {
                         "role": "system",

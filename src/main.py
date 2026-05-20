@@ -1,5 +1,5 @@
 import argparse
-from pipeline import run_pipeline
+from pipeline import ContractAnalysisPipeline
 
 
 
@@ -9,9 +9,11 @@ if __name__ == "__main__":
     parser.add_argument("amendment", help="Path a la imagen de la enmienda")
     args = parser.parse_args()
 
-    answer = run_pipeline({
+    pipeline = ContractAnalysisPipeline()
+    
+    analysis_result = pipeline.run({
         "original": args.original,
         "amendment": args.amendment
     })
 
-    print(answer.model_dump_json(indent=2))
+    print(analysis_result.model_dump_json(indent=2))
