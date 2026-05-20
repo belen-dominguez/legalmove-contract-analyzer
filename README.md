@@ -1,6 +1,6 @@
 # LegalMove Contract Analyzer 🏛️
 
-Sistema multi-agente autónomo que analiza contratos y sus enmiendas usando visión artificial e inteligencia artificial, identificando automáticamente qué cláusulas cambiaron y generando un reporte estructurado listo para producción.
+Sistema multi-agente que analiza contratos y sus enmiendas usando visión artificial e inteligencia artificial, identificando automáticamente qué cláusulas cambiaron y generando un reporte estructurado.
 
 ---
 
@@ -72,10 +72,9 @@ legalmove-contract-analyzer/
 │   ├── agents/
 │   │   ├── contextualization_agent.py   # Agente 1: Analista Senior
 │   │   └── extraction_agent.py          # Agente 2: Auditor Legal
-|   ├── parsers/
-│   |   └── image_parser.py
+│   ├── parsers/
+│   │   └── image_parser.py           # Parsing multimodal con GPT-4o Vision
 │   ├── utils/
-│   │   ├── image_parser.py              # Parsing multimodal con GPT-4o Vision
 │   │   ├── llm_client.py
 │   │   └── retry_llm_call.py
 │   ├── models/
@@ -196,16 +195,36 @@ Cada span registra: input, output y latencia.
 
 ---
 
+## Resiliencia y validación
+
+El pipeline incorpora mecanismos de resiliencia para mitigar respuestas inconsistentes de modelos LLM:
+
+- Retry automático ante respuestas vacías o inválidas
+- Validación estructural intermedia entre etapas
+- Validación final estricta con Pydantic
+- Logging detallado de cada etapa del pipeline
+- Trazabilidad completa mediante Langfuse
+
+---
+
 ## Decisiones técnicas
 
 **¿Por qué dos agentes en lugar de uno?**
 Separar contextualización de extracción mejora la calidad del análisis. El Agente 1 (Analista Senior) construye un mapa estructural de los documentos sin distracciones. El Agente 2 (Auditor Legal) recibe ese mapa ya procesado y puede enfocarse exclusivamente en identificar cambios con mayor precisión.
 
 **¿Por qué GPT-4o para el parsing de imágenes?**
-GPT-4o es el modelo multimodal más capaz de OpenAI para interpretar documentos escaneados con jerarquía de cláusulas compleja. GPT-4o-mini es suficiente para los agentes que trabajan sobre texto ya extraído.
+GPT-4o ofrece capacidades multimodales robustas para interpretar documentos escaneados con jerarquía de cláusulas compleja. GPT-4o-mini es más eficiente en costo y latencia para los agentes que trabajan sobre texto ya extraído.
 
 **¿Por qué Langfuse y no otra herramienta de observabilidad?**
 Langfuse tiene integración nativa con Python, permite jerarquía de spans, y su dashboard facilita la auditoría del pipeline durante la defensa en vivo.
 
 **¿Por qué Pydantic para validar el output?**
 El output del Agente 2 es texto libre que puede contener ruido. Pydantic garantiza que el JSON final cumple estrictamente el esquema requerido antes de ser consumido por otros sistemas, con validación de tipos y longitudes mínimas por campo.
+
+---
+
+## Limitaciones
+
+- La calidad del parsing depende de la legibilidad de las imágenes.
+- Contratos extremadamente extensos pueden requerir chunking o procesamiento incremental.
+- El pipeline está optimizado para contratos en español
