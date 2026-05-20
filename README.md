@@ -133,6 +133,14 @@ LANGFUSE_HOST=https://cloud.langfuse.com
 
 ### Correr el pipeline
 
+Primer par de contratos:
+
+```bash
+python src/main.py data/test_contracts/documento_1__original.jpg data/test_contracts/documento_1__enmienda.jpg
+```
+
+Segundo par de contratos:
+
 ```bash
 python src/main.py data/test_contracts/documento_2__original.jpg data/test_contracts/documento_2__enmienda.jpg
 ```

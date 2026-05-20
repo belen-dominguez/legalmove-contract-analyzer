@@ -4,7 +4,6 @@ app:
 
 openai:
   model_vision: gpt-4o
-  # model_vision: gpt-4o-mini
   model_agents: gpt-4o-mini
   max_tokens: 2000
   temperature_contextualization: 0.2
