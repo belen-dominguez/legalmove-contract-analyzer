@@ -1,5 +1,6 @@
 # La funcion de este agente es recibir dos textos extraidos y producir un resumen de los cambios realizados entre ambos documentos
 
+from agents.base_agent import BaseAgent
 from shared.config_loader import ConfigLoader
 from shared.logger import get_logger
 from utils.llm_client import generate_response
@@ -8,9 +9,9 @@ from prompts.templates import EXTRACTION_AGENT_PROMPT
 config = ConfigLoader()
 log = get_logger("extraction_agent")
 
-class ExtractionAgent():
+class ExtractionAgent(BaseAgent):
     def __init__(self, client):
-        self.client = client
+        super().__init__(client)
 
     def extract(self, original_text, amendment_text, document_analysis):
         """Recibe el texto completo del contrato original, el texto completo de la enmienda y un análisis del documento (mapa conceptual) y produce un resumen de los cambios realizados entre ambos documentos.
@@ -25,26 +26,23 @@ class ExtractionAgent():
         log.info("Extraction agent started")
 
         try:
-            model = config.get("openai.model_agents")
-            temperature = config.get("openai.temperature_extraction", 0)
-            input_data = [
-                {
-                    "role": "system",
-                    "content": EXTRACTION_AGENT_PROMPT
-                },
-                {
-                    "role": "user",
-                    "content": f"documento original:\n{original_text}\n\nEnmienda:\n{amendment_text}\n\nMapa conceptual de los documentos a comparar:\n{document_analysis}"
-                }
-            ]
-            
-            return generate_response(
-                client=self.client,
-                model=model,
-                temperature=temperature,
-                input_data=input_data
+            response = self.generate(
+                system_prompt=EXTRACTION_AGENT_PROMPT,
+                user_prompt=f"""
+                Documento original:
+                {original_text}
+
+                Enmienda:
+                {amendment_text}
+
+                Mapa contextual de los documentos a comparar:
+                {document_analysis}
+                """
             )
 
+            log.info("Extraction completed successfully")
+
+            return response
                     
         except Exception as e:
             log.error(f"Error en ExtractionAgent: {e}")

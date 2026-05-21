@@ -70,6 +70,7 @@ legalmove-contract-analyzer/
 │   ├── main.py                          # Entry point
 │   ├── pipeline.py                      # Orquestación del pipeline completo
 │   ├── agents/
+|   |   ├── base_agent.py
 │   │   ├── contextualization_agent.py   # Agente 1: Analista Senior
 │   │   └── extraction_agent.py          # Agente 2: Auditor Legal
 │   ├── parsers/
