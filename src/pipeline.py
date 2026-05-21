@@ -110,8 +110,8 @@ class ContractAnalysisPipeline:
                 logger.info("Contextualizing documents")
                 document_analysis = retry_llm_call(
                     lambda: self.contextualization_agent.contextualize(
-                        original_parsed,
-                        amendment_parsed
+                        original_parsed["text"],
+                        amendment_parsed["text"]
                     )
                 )
 
@@ -132,9 +132,9 @@ class ContractAnalysisPipeline:
                 logger.info("Extracting changes between documents")
                 changes_summary = retry_llm_call(
                     lambda: self.extraction_agent.extract(
-                        original_parsed,
-                        amendment_parsed,
-                        document_analysis
+                        original_parsed["text"],
+                        amendment_parsed["text"],
+                        document_analysis["text"]
                     )
                 )
 

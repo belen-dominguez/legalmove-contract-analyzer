@@ -31,7 +31,6 @@ def generate_response(
     if len(response_text) < 50:
         raise ValueError("El modelo devolvió una respuesta vacía o inválida.")
 
-    # return response_text
     return {
         "text": response_text,
         "usage": {
