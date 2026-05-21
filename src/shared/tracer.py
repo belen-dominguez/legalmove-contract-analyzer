@@ -12,6 +12,8 @@ from langfuse import Langfuse
 load_dotenv()
 
 
+
+
 class _DummyContext:
     def __enter__(self):
         return self
@@ -42,9 +44,11 @@ class Tracer:
             return default
 
     # iniciar trace
-    def start_trace(self, name: str,  input_data: dict):
+    def start_trace(self,as_type: str, model: str = None, name: str = None,  input_data: dict = None):
          return self._safe(
             self.client.start_as_current_observation,
+            as_type=as_type,
+            model=model,
             name=name,
             input=input_data,
             default=_DummyContext()
@@ -52,23 +56,39 @@ class Tracer:
     
 
     # crear span
-    def start_span(self, name: str, input_data: dict = None):
+    def start_span(self, as_type: str, model: str = None, name: str = None, input_data: dict = None):
         return self._safe(
             self.client.start_as_current_observation,
+            as_type=as_type,
+            model=model,
             name=name,
             input=input_data,
             default=_DummyContext()
         )
     
     # guardar output final
-    def set_output(self, output_data: dict):
+    def set_output(self, span, output_data: dict):
         self._safe(
-            self.client.update_current_span,
+            span.update,
             output=output_data
         )
 
 
-    
+    # guardar metadata
+    def set_metadata(self, span, metadata: dict):
+        self._safe(
+            span.update,
+            metadata=metadata
+        )
+
+    # guardar errores
+    def set_error(self, span, error_message: str):
+        self._safe(
+            span.update,
+            level="ERROR",
+            status_message=error_message
+        )
+
       
     # fuerza el envío inmediato de todo
     def flush(self):

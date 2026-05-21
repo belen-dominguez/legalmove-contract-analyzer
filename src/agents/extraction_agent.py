@@ -3,7 +3,6 @@
 from agents.base_agent import BaseAgent
 from shared.config_loader import ConfigLoader
 from shared.logger import get_logger
-from utils.llm_client import generate_response
 from prompts.templates import EXTRACTION_AGENT_PROMPT
 
 config = ConfigLoader()
