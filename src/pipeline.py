@@ -47,6 +47,9 @@ class ContractAnalysisPipeline:
                         lambda: parse_contract_image(documents["original"], self.client)
                     )
 
+                    text = original_parsed["text"]
+                    usage = original_parsed["usage"]
+
                     self.tracer.set_metadata(span, {
                         **BASE_METADATA,
                         "parser": "vision_ocr",
@@ -55,7 +58,8 @@ class ContractAnalysisPipeline:
                     })
             
                     self.tracer.set_output(span, {
-                        "text_length": len(original_parsed)
+                        "text": original_parsed["text"],
+                        "usage": original_parsed["usage"]
                     })
 
 
@@ -76,6 +80,9 @@ class ContractAnalysisPipeline:
                         lambda: parse_contract_image(documents["amendment"], self.client)
                     )
 
+                    text = amendment_parsed["text"]
+                    usage = amendment_parsed["usage"]
+
                     self.tracer.set_metadata(span, {
                         **BASE_METADATA,
                         "parser": "vision_ocr",
@@ -84,7 +91,8 @@ class ContractAnalysisPipeline:
                     })
                 
                     self.tracer.set_output(span, {
-                        "text_length": len(amendment_parsed)
+                        "text": text,
+                        "usage": usage
                     })
 
                 except Exception as e:
@@ -106,6 +114,9 @@ class ContractAnalysisPipeline:
                         amendment_parsed
                     )
                 )
+
+                text = document_analysis["text"]
+                usage = document_analysis["usage"]
                 
                 self.tracer.set_metadata(span, {
                     **BASE_METADATA,
@@ -113,7 +124,7 @@ class ContractAnalysisPipeline:
                     "temperature": config.get("openai.temperature_contextualization"),
                     "strategy": "legal_context_merge"
                 })
-                self.tracer.set_output(span, {"text_length": len(document_analysis)})
+                self.tracer.set_output(span, {"text": text, "usage": usage})
 
 
             with self.tracer.start_span( as_type="generation",model=config.get("openai.model_agents"), name= config.get("langfuse.spans.extraction"), input_data={"original": original_parsed, "amendment": amendment_parsed, "context": document_analysis}) as span:
@@ -127,6 +138,9 @@ class ContractAnalysisPipeline:
                     )
                 )
 
+                text =  changes_summary["text"]
+                usage =  changes_summary["usage"]
+
                 self.tracer.set_metadata(span, {
                     **BASE_METADATA,
                     "model": config.get("openai.model_agents"),
@@ -134,9 +148,9 @@ class ContractAnalysisPipeline:
                     "diff_strategy": "llm_structured_diff",
                     "context_used": True
                 })
-                self.tracer.set_output(span, {"text_length": len(changes_summary)})
+                self.tracer.set_output(span, {"text": text, "usage": usage})
                 
-            results =  ContractChangeOutput.validate_output(changes_summary)
+            results =  ContractChangeOutput.validate_output(text)
             logger.info("Output validated successfully")
             logger.info("Pipeline completed successfully")
             

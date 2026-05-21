@@ -12,8 +12,6 @@ from langfuse import Langfuse
 load_dotenv()
 
 
-
-
 class _DummyContext:
     def __enter__(self):
         return self

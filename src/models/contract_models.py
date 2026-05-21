@@ -14,7 +14,7 @@ class ContractChangeOutput(BaseModel):
     summary_of_the_change: str = Field(..., min_length=20, description="Resumen detallado de los cambios realizados")
 
     @staticmethod
-    def validate_output(json_string: str) -> "ContractChangeOutput": 
+    def validate_output(data) -> "ContractChangeOutput": 
         """
         Valida que un JSON  cumpla con la estructura definida.
         Si el JSON es válido, devuelve una instancia de ContractChangeOutput.
@@ -23,8 +23,18 @@ class ContractChangeOutput(BaseModel):
         
         try:
             log.info("Validating output format")
-            json_string = json_string.strip().removeprefix("```json").removesuffix("```").strip()
-            return ContractChangeOutput.model_validate_json(json_string)
+            # CASO 1: string JSON
+            if isinstance(data, str):
+                cleaned = data.strip().removeprefix("```json").removesuffix("```").strip()
+                return ContractChangeOutput.model_validate_json(cleaned)
+
+            # CASO 2: dict directo (nuevo flow)
+            elif isinstance(data, dict):
+                return ContractChangeOutput.model_validate(data)
+
+            else:
+                raise ValueError(f"Unsupported type: {type(data)}")
+            
         except Exception as e:
             log.error(f"Invalid output format: {e}")
             raise ValueError(f"Invalid output format: {e}")

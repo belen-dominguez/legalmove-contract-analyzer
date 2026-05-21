@@ -24,7 +24,7 @@ class ContextualizationAgent(BaseAgent):
         log.info("Contextualization agent started")
 
         try:
-            response = self.generate(
+            response_data = self.generate(
                 system_prompt=CONTEXT_AGENT_PROMPT,
                 user_prompt=f"""
                     contrato original:
@@ -41,7 +41,7 @@ class ContextualizationAgent(BaseAgent):
 
             log.info("Context map generated successfully")
 
-            return response  
+            return response_data  
         except Exception as e:
             log.error(f"Error en ContextualizationAgent: {e}")
             raise 

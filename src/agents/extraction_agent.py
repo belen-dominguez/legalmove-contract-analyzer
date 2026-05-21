@@ -25,7 +25,7 @@ class ExtractionAgent(BaseAgent):
         log.info("Extraction agent started")
 
         try:
-            response = self.generate(
+            response_data = self.generate(
                 system_prompt=EXTRACTION_AGENT_PROMPT,
                 user_prompt=f"""
                 Documento original:
@@ -41,7 +41,7 @@ class ExtractionAgent(BaseAgent):
 
             log.info("Extraction completed successfully")
 
-            return response
+            return response_data
                     
         except Exception as e:
             log.error(f"Error en ExtractionAgent: {e}")

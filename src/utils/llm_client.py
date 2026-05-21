@@ -23,4 +23,12 @@ def generate_response(
     if len(response_text) < 50:
         raise ValueError("El modelo devolvió una respuesta vacía o inválida.")
 
-    return response_text
+    # return response_text
+    return {
+        "text": response_text,
+        "usage": {
+            "input_tokens": response.usage.input_tokens if hasattr(response, "usage") else None,
+            "output_tokens": response.usage.output_tokens if hasattr(response, "usage") else None,
+            "total_tokens": response.usage.total_tokens if hasattr(response, "usage") else None,
+        } if hasattr(response, "usage") else None
+    }
