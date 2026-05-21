@@ -155,6 +155,11 @@ class ContractAnalysisPipeline:
             logger.info("Pipeline completed successfully")
             
             logger.info("LegalMove Contract Analyzer finished")
+            self.tracer.set_output(trace, {
+                "sections_changed": results.sections_changed,
+                "topics_touched": results.topics_touched,
+                "summary_of_the_change": results.summary_of_the_change
+            })
             self.tracer.flush()
             return results
             

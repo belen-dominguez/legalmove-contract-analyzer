@@ -289,6 +289,9 @@ Los errores determinísticos locales (archivos inexistentes o formatos inválido
 **¿Por qué dos agentes en lugar de uno?**
 Separar contextualización de extracción mejora la calidad del análisis. El Agente 1 (Analista Senior) construye un mapa estructural de los documentos sin distracciones. El Agente 2 (Auditor Legal) recibe ese mapa ya procesado y puede enfocarse exclusivamente en identificar cambios con mayor precisión.
 
+**¿Por qué la API de OpenAI directamente en lugar de LangChain?**
+Si bien la consigna sugiere LangChain para orquestar los agentes, se optó por implementarlos directamente con la API de OpenAI. Esto permite mayor control sobre el flujo de datos entre agentes, manejo de errores más granular y una integración más limpia con Langfuse para la trazabilidad. La arquitectura de dos agentes colaborativos con handoff explícito se mantiene intacta.
+
 **¿Por qué GPT-4o para el parsing de imágenes?**
 GPT-4o ofrece capacidades multimodales robustas para interpretar documentos escaneados con jerarquía de cláusulas compleja. GPT-4o-mini es más eficiente en costo y latencia para los agentes que trabajan sobre texto ya extraído.
 
