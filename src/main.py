@@ -1,5 +1,9 @@
 import argparse
+import sys
 from pipeline import ContractAnalysisPipeline
+from shared.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 
@@ -11,9 +15,14 @@ if __name__ == "__main__":
 
     pipeline = ContractAnalysisPipeline()
     
-    analysis_result = pipeline.run({
-        "original": args.original,
-        "amendment": args.amendment
-    })
+    try:
+        analysis_result = pipeline.run({
+            "original": args.original,
+            "amendment": args.amendment
+        })
 
-    print(analysis_result.model_dump_json(indent=2))
+        print(analysis_result.model_dump_json(indent=2))
+
+    except Exception as e:
+        logger.error(f"Pipeline failed: {e}")
+        sys.exit(1)

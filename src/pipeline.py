@@ -73,7 +73,7 @@ class ContractAnalysisPipeline:
                     )
                 )
                 self.tracer.set_output({"text": changes_summary})
-
+                
             results =  ContractChangeOutput.validate_output(changes_summary)
             logger.info("Output validated successfully")
             logger.info("Pipeline completed successfully")

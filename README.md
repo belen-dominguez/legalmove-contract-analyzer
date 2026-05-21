@@ -208,6 +208,82 @@ El pipeline incorpora mecanismos de resiliencia para mitigar respuestas inconsis
 
 ---
 
+## Validación de errores
+
+El pipeline incluye validaciones para entradas inválidas y manejo robusto de errores para evitar consumo innecesario de tokens y mejorar la resiliencia del sistema.
+
+### Validaciones implementadas
+
+- Verificación de existencia de archivos
+- Validación de extensiones soportadas (`.png`, `.jpg`, `.jpeg`, `.webp`)
+- Retry automático únicamente para errores transitorios del LLM
+- Fail-fast para errores determinísticos de entrada
+- Logging estructurado de errores y eventos del pipeline
+
+---
+
+### Caso 1 — Archivo inexistente
+
+Ejecutar:
+
+```bash
+python src/main.py fake.jpg fake2.jpg
+```
+
+Resultado esperado:
+
+- El pipeline falla inmediatamente
+- Se muestra un mensaje claro indicando que el archivo no existe
+- No se realizan retries innecesarios
+
+Ejemplo de salida:
+
+```text
+INFO     LegalMove Contract Analyzer started
+INFO     Parsing original contract
+ERROR    File not found: [Errno 2] No such file or directory: 'fake.jpg'
+```
+
+---
+
+### Caso 2 — Formato de archivo inválido
+
+El proyecto incluye un archivo de prueba:
+
+```text
+data/test_contracts/error_sample.txt
+```
+
+Ejecutar:
+
+```bash
+python src/main.py data/test_contracts/documento_1__original.jpg data/test_contracts/error_sample.txt
+```
+
+Resultado esperado:
+
+- Validación inmediata del formato
+- Error explícito indicando extensiones soportadas
+- Sin retries innecesarios
+- Sin llamadas adicionales al modelo
+
+Ejemplo de salida:
+
+```text
+INFO     Parsing amendment
+ERROR    Validation error: La ruta de la imagen debe ser un archivo de imagen válido (.png, .jpg, .jpeg, .webp).
+```
+
+---
+
+### Retry inteligente
+
+El mecanismo de retry está diseñado para reintentar únicamente errores transitorios relacionados con el modelo o la API (timeouts, rate limits o respuestas inválidas del LLM).
+
+Los errores determinísticos locales (archivos inexistentes o formatos inválidos) fallan inmediatamente para evitar latencia y consumo innecesario de tokens.
+
+---
+
 ## Decisiones técnicas
 
 **¿Por qué dos agentes en lugar de uno?**
