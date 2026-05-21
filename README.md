@@ -185,7 +185,7 @@ python evaluation/evaluate.py
 Cada ejecución genera una traza con la siguiente jerarquía de spans:
 
 ```
-contract-analysis                    ← trace raíz
+m4-contract-analyzer                     ← trace raíz
 ├── parse_original_contract          ← parsing imagen original
 ├── parse_amendment_contract         ← parsing imagen enmienda
 ├── contextualization_agent          ← Agente 1
