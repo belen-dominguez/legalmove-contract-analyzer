@@ -58,8 +58,8 @@ class ContractAnalysisPipeline:
                     })
             
                     self.tracer.set_output(span, {
-                        "text": original_parsed["text"],
-                        "usage": original_parsed["usage"]
+                        "text": text,
+                        "usage": usage
                     })
 
 
