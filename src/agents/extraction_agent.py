@@ -36,7 +36,8 @@ class ExtractionAgent(BaseAgent):
 
                 Mapa contextual de los documentos a comparar:
                 {document_analysis}
-                """
+                """,
+                json_mode=True
             )
 
             log.info("Extraction completed successfully")

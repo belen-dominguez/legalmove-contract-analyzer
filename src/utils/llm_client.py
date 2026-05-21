@@ -8,14 +8,22 @@ def generate_response(
     model,
     input_data,
     temperature=0,
+    json_mode=False
 ):
     max_tokens = config.get("openai.max_tokens", 2000)
 
+    args = {
+        "model": model,
+        "temperature": temperature,
+        "max_output_tokens": max_tokens,
+        "input": input_data,
+    }
+    
+    if json_mode:
+        args["text"] = {"format": {"type": "json_object"}}
+
     response = client.responses.create(
-        model=model,
-        temperature=temperature,
-        max_output_tokens=max_tokens,
-        input=input_data,
+       **args
     )
 
     response_text = response.output_text.strip()

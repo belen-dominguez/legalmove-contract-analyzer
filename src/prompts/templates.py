@@ -15,7 +15,7 @@ Tu tarea es comparar dos textos completos de un contrato (un original y una enmi
 2. Los temas que se tocan en esas secciones.
 3. Un resumen breve de los cambios realizados.
 No agregues nada que no esté escrito en los documentos. Solo extrae la información de forma clara y precisa.
-Devuelve la información en formato JSON con la siguiente estructura:
+Devuelve SOLO JSON válido. No uses markdown. No uses ``` ni explicaciones. Devuelve la información en formato JSON con la siguiente estructura:
 {
     "sections_changed": [lista de secciones modificadas o agregadas],
     "topics_touched": [lista de temas tratados en esas secciones],
